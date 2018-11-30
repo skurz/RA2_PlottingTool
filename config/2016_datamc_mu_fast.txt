@@ -1,0 +1,66 @@
+# Specify global parameters
+global :: id: MuCS_DataMC_Integration
+global :: lumi: 12.9
+global :: input path: ~/xxl-af-cms/Lost_Lepton_delphiClass/
+global :: publication status: Preliminary
+global :: output formats: pdf
+style :: plot yields: false 
+
+
+# Specify the variables that are read from the ntuple and their type
+variable :: name: HT; type: Double_t; label: H_{T}; unit: GeV
+variable :: name: MHT; type: Double_t; label: H_{T}^{miss}; unit: GeV
+variable :: name: MET; type: Double_t; label: E_{T}^{miss}; unit: GeV
+variable :: name: NJets; type: Int_t; label: N_{Jets}
+variable :: name: BTags; type: Int_t; label: N_{b}
+variable :: name: NVtx; type: Int_t; label: N(Vtx)
+variable :: name: MTW; type: Float_t; label: M_{T}(w)
+variable :: name: Bin; type: UShort_t; label: Bin
+variable :: name: ElectronsNum; type: UShort_t
+variable :: name: MuonsNum; type: UShort_t
+variable :: name: MuonsPt; type: Float_t; label: p_{T}(#mu)
+variable :: name: MuonsEta; type: Float_t; label: #eta(#mu)
+variable :: name: DeltaPhi1; type: Double_t; label: #Delta#Phi_{1}
+variable :: name: DeltaPhi2; type: Double_t; label: #Delta#Phi_{2}
+variable :: name: DeltaPhi3; type: Double_t; label: #Delta#Phi_{3}
+variable :: name: DeltaPhi4; type: Double_t; label: #Delta#Phi_{4}
+
+
+#weights
+variable :: name: Weight; type: Double_t
+
+#############################################################################################################
+# Specify the data source and label the type of data
+dataset :: label: MCExall; type: mc; files: Prediction.root ; tree: LostLeptonPrediction; weight: Weight; scales : 24480
+
+dataset :: label: MuData; type: data; files: Prediction_data.root  ; tree: LostLeptonPrediction; scale:1
+
+
+#############################################################################################################
+#special selection
+selection :: label: Baseline; cuts: HT > 250 && MHT > 250 && NJets > 1.5 && MuonsNum > 0.5 && MuonsNum < 1.5 && ElectronsNum < 0.5 && MTW < 100 && Bin < 900
+selection :: label: BTags0; cuts: Baseline && BTags < 0.5
+selection :: label: BTags1Inf; cuts: Baseline && BTags > 0.5
+selection :: label: BTags2Inf; cuts: Baseline && BTags > 1.5
+
+
+
+#############################################################################################################
+style :: dataset: MuData; plot label: Data: #mu CS; marker: 10; color: 1
+style :: dataset: MCExall; plot label: MC: all; color: kBlue
+
+#############################################################################################################
+plot :: variable: HT; data: MuData; background:  MCExall; histogram: 22, 250, 3000, log
+plot :: variable: MHT; data: MuData; background: MCExall; histogram: 20, 250, 1500, log
+plot :: variable: MET; data: MuData; background: MCExall; histogram: 22, 125, 1500, log
+plot :: variable: NJets; data: MuData; background: MCExall; histogram: 9, 1.5, 10.5, log
+plot :: variable: BTags; data: MuData; background: MCExall; histogram: 3, -0.5, 2.5, log
+plot :: variable: MTW; data: MuData; background: MCExall; histogram: 60, 0, 300, log
+plot :: variable: NVtx; data: MuData; background: MCExall;  histogram: 25, -0.5, 49.5, log
+plot :: variable: Bin; data: MuData; background: MCExall; histogram: 160, 0, 160, log
+plot :: variable: MuonsPt; data: MuData; background: MCExall; histogram: 25, 0, 500, log
+plot :: variable: MuonsEta; data: MuData; background: MCExall; histogram: 20, -2.6, 2.6, log
+plot :: variable: DeltaPhi1; data: MuData; background: MCExall; histogram: 40, 0, 4, log
+plot :: variable: DeltaPhi2; data: MuData; background: MCExall; histogram: 40, 0, 4, log
+plot :: variable: DeltaPhi3; data: MuData; background: MCExall; histogram: 40, 0, 4, log
+plot :: variable: DeltaPhi4; data: MuData; background: MCExall; histogram: 40, 0, 4, log

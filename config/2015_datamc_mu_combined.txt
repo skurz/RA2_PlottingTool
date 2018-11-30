@@ -1,0 +1,61 @@
+# Specify global parameters
+global :: id: MuCS_DataMC_1300
+global :: lumi: 1287
+global :: publication status: Preliminary
+global :: output formats: pdf
+style :: plot yields: false 
+
+
+# Specify the variables that are read from the ntuple and their type
+variable :: name: HT; type: Double_t; label: H_{T}; unit: GeV
+variable :: name: MHT; type: Double_t; label: H_{T}^{miss}; unit: GeV
+variable :: name: MET; type: Double_t; label: E_{T}^{miss}; unit: GeV
+variable :: name: NJets; type: Int_t; label: N_{Jets}
+variable :: name: BTags; type: Int_t; label: N_{b}
+variable :: name: NVtx; type: Int_t; label: N(Vtx)
+variable :: name: MTW; type: Float_t; label: M_{T}(w)
+variable :: name: Bin; type: UShort_t; label: Bin
+
+# selection values
+variable :: name: Expectation; type: UShort_t
+variable :: name: ExpectationReductionIsoTrack; type: UShort_t
+
+#weights
+variable :: name: Weight; type: Double_t
+variable :: name: WeightPuCorr; type: Double_t
+
+
+variable :: name: selectedIDIsoMuonsNum; type: UShort_t
+variable :: name: selectedIDIsoElectronsNum; type: UShort_t
+#############################################################################################################
+# Specify the data source and label the type of data
+
+# unscaled: 0.04097
+# scaled: 0.05039
+
+dataset :: label: MCEx; type: mc; files:~/xxl-af-cms/Lost_Lepton_delphiClass/Expectation.root ; tree: LostLeptonExpectation; weight: Weight ; scales : 1287
+
+dataset :: label: MuData; type: data; files:~/xxl-af-cms/Lost_Lepton_delphiClass/Prediction_data.root  ; tree: LostLeptonPrediction; scale:1
+
+
+#############################################################################################################
+#special selection
+selection :: label: Baseline; cuts: NJets > 3.1 && MHT > 200 && HT > 500 && selectedIDIsoMuonsNum > 0.5 && selectedIDIsoMuonsNum < 1.5 && selectedIDIsoElectronsNum < 0.5 && MTW<100
+#N_{Jets}#geq2 (excl. #Delta#Phi_{1,2,3})
+
+
+#############################################################################################################
+style :: dataset: MuData; plot label: Data: #mu CS; marker: 10; color: 1
+style :: dataset: MCEx; plot label: MC: #mu CS; color: kBlue
+
+#############################################################################################################
+plot :: variable: HT; data: MuData; background: MCEx; histogram: 20, 500, 2500, log
+plot :: variable: MHT; data: MuData; background: MCEx; histogram: 16, 200, 1000, log
+plot :: variable: MET; data: MuData; background: MCEx; histogram: 22, 200, 1300, log
+plot :: variable: NJets; data: MuData; background: MCEx; histogram: 7, 3.5, 10.5, log
+plot :: variable: BTags; data: MuData; background: MCEx; histogram: 7, -0.5, 6.5, log
+plot :: variable: MTW; data: MuData; background: MCEx; histogram: 40, 0, 200, log
+plot :: variable: NVtx; data: MuData; background: MCEx;  histogram: 25, -0.5, 49.5, log
+plot :: variable: Bin; data: MuData; background: MCEx; histogram: 72, 0, 72, log
+
+

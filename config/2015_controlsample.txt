@@ -1,0 +1,76 @@
+# Specify global parameters
+global :: id: ControlSampleMoriond2017
+global :: lumi: 36.3
+global :: publication status: Preliminary
+global :: output formats: pdf
+style :: plot yields: true 
+
+
+# Specify the variables that are read from the ntuple and their type
+variable :: name: HT; type: Double_t; label: H_{T}; unit: GeV
+variable :: name: MHT; type: Double_t; label: H_{T}^{miss}; unit: GeV
+variable :: name: MET; type: Double_t; label: E_{T}^{miss}; unit: GeV
+variable :: name: NJets; type: Int_t; label: N_{Jets}
+variable :: name: BTags; type: Int_t; label: N_{b}
+variable :: name: NVtx; type: Int_t; label: N(Vtx)
+variable :: name: MTW; type: Float_t; label: M_{T}(w)
+variable :: name: Bin; type: UShort_t; label: Bin
+variable :: name: BinQCD; type: UShort_t; label: BinQCD
+
+# selection values
+variable :: name: Expectation; type: UShort_t
+variable :: name: ExpectationReductionIsoTrack; type: UShort_t
+
+#weights
+variable :: name: Weight; type: Double_t
+
+#prediction
+variable :: name: totalWeightDiLep; type: Float_t
+variable :: name: totalWeightDiLepIsoTrackReduced; type: Float_t
+
+
+variable :: name: MuonsNum; type: UShort_t
+variable :: name: ElectronsNum; type: UShort_t
+#############################################################################################################
+# Specify the data source and label the type of data
+
+# scales = 898
+
+dataset :: label: MCEx; type: mc; files:~/xxl-af-cms/Lost_Lepton_delphiClass/Expectation.root ; tree: LostLeptonExpectation; weight: Weight ; scales: 36348.540
+dataset :: label: MuCS; type: mcprediction; files:~/xxl-af-cms/Lost_Lepton_delphiClass/Prediction.root  ; tree: LostLeptonPrediction; weight: Weight ; scales: 36348.540
+dataset :: label: ElecCS; type: mcprediction; files:~/xxl-af-cms/Lost_Lepton_delphiClass/Prediction.root  ; tree: LostLeptonPrediction; weight: Weight ; scales: 36348.540
+#dataset :: label: T1ttttmu; type: signal; files:~/xxl-af-cms/Lost_Lepton_delphiClass/Expectation_T1tttt_1500_100.root  ; tree: LostLeptonExpectation; weight: Weight ; scales: 30000
+#dataset :: label: T1ttttelec; type: signal; files:~/xxl-af-cms/Lost_Lepton_delphiClass/Expectation_T1tttt_1500_100.root  ; tree: LostLeptonExpectation; weight: Weight ; scales: 30000
+
+
+
+
+#############################################################################################################
+#special selection
+#selection :: label: Baseline; cuts:  Expectation < 1.5 (MCEx) + Expectation > 0.5 (MCEx) + NJets > 1.1 + MHT > 250 + HT > 300 + MTW < 100 ( MuCS, ElecCS) + MuonsNum > 0.5 ( MuCS)+  MuonsNum < 1.5 ( MuCS) + ElectronsNum < 0.5 ( MuCS) +  MuonsNum <0.5(ElecCS) + ElectronsNum >0.5 (ElecCS) + ElectronsNum < 1.5 (ElecCS)
+
+selection :: label: Baseline_MCEx; cuts:  Expectation == 1 && ExpectationReductionIsoTrack == 0; apply to: MCEx
+selection :: label: Baseline_MuPr; cuts:  MTW< 100 && MuonsNum==1 && ElectronsNum==0; apply to: MuCS
+selection :: label: Baseline_ElecPr; cuts: MTW< 100 && MuonsNum==0 && ElectronsNum==1; apply to: ElecCS
+#selection :: label: Baseline_MuSig; cuts: MTW< 100 && MuonsNum==1 && ElectronsNum==0; apply to: T1ttttmu
+#selection :: label: Baseline_ElecSig; cuts: MTW< 100 && MuonsNum==0 && ElectronsNum==1; apply to: T1ttttelec
+
+selection :: label: Baseline; cuts: Baseline_MCEx && Baseline_MuPr && Baseline_ElecPr && NJets > 1.1 && MHT > 250 && HT > 300 && Bin < 900
+#selection :: label: Baseline; cuts: Baseline_MCEx && Baseline_MuPr && Baseline_ElecPr && NJets > 3.1 && MHT > 200 && HT > 500 && Baseline_MuSig && Baseline_ElecSig
+
+#############################################################################################################
+style :: dataset: ElecCS; plot label: MC: e CS; color: kRed+1
+style :: dataset: MuCS; plot label: MC: #mu CS; color: kBlue+1
+style :: dataset: MCEx; plot label: MC: Exp. LostLepton; marker: 10; color: kBlack
+#style :: dataset: T1ttttmu; plot label:#mu: pp#rightarrow#tilde{g}#tilde{g}, #tilde{g}#rightarrowt#bar{t}#tilde{#chi}^{0}_{1}; color: kGreen 
+#style :: dataset: T1ttttelec; plot label:e: pp#rightarrow#tilde{g}#tilde{g}, #tilde{g}#rightarrowt#bar{t}#tilde{#chi}^{0}_{1}; color: kOrange 
+
+#############################################################################################################
+plot :: variable: HT; data: MCEx; background:  ElecCS + MuCS; histogram: 20, 300, 2300, log
+plot :: variable: MHT; data: MCEx; background: ElecCS + MuCS; histogram: 16, 200, 1100, log
+plot :: variable: MET; data: MCEx; background: ElecCS + MuCS; histogram: 16, 250, 1100, log
+plot :: variable: NJets; data: MCEx; background: ElecCS + MuCS; histogram: 10, 1.5, 11.5, log
+plot :: variable: BTags; data: MCEx; background: ElecCS + MuCS; histogram: 6, -0.5, 5.5, log
+plot :: variable: MTW; data: MCEx; background: ElecCS + MuCS; histogram: 40, 0, 250, log
+plot :: variable: NVtx; data: MCEx; background: ElecCS + MuCS;  histogram: 25, -0.5, 49.5, log
+plot :: variable: Bin; data: MCEx; background: ElecCS + MuCS; histogram: 174, 0.5, 174.5, log

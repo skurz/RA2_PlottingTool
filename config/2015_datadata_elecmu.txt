@@ -1,0 +1,53 @@
+# Specify global parameters
+global :: id: DataData_ElecMu_newBaseline_HT300MHT300
+global :: lumi: 813
+global :: input path: /afs/desy.de/user/k/kurzsimo/xxl-af-cms/Lost_Lepton_delphiClass/
+global :: publication status: Preliminary
+global :: output formats: pdf
+style :: plot yields: false 
+
+
+# Specify the variables that are read from the ntuple and their type
+variable :: name: HT; type: Double_t; label: H_{T}; unit: GeV
+variable :: name: MHT; type: Double_t; label: H_{T}^{miss}; unit: GeV
+variable :: name: MET; type: Double_t; label: E_{T}^{miss}; unit: GeV
+variable :: name: NJets; type: Int_t; label: N_{Jets}
+variable :: name: BTags; type: Int_t; label: N_{b}
+variable :: name: NVtx; type: Int_t; label: N(Vtx)
+variable :: name: MTW; type: Float_t; label: M_{T}(w)
+variable :: name: Bin; type: UShort_t; label: Bin
+variable :: name: selectedIDIsoElectronsNum; type: UShort_t
+variable :: name: selectedIDIsoMuonsNum; type: UShort_t
+variable :: name: selectedIDIsoMuonsPt; type: Float_t; label: p_{T}(#mu)
+variable :: name: selectedIDIsoMuonsEta; type: Float_t; label: #eta(#mu)
+
+#weights
+variable :: name: Weight; type: Double_t
+
+#############################################################################################################
+# Specify the data source and label the type of data
+
+dataset :: label: MuData; type: data; files: Prediction_data.root  ; tree: LostLeptonPrediction; scales:1
+dataset :: label: ElecData; type: mc; files: Prediction_data.root  ; tree: LostLeptonPrediction; scales:1
+
+
+#############################################################################################################
+#special selection
+selection :: label: Mu_Baseline; apply to: MuData; cuts: selectedIDIsoMuonsNum > 0.5 && selectedIDIsoMuonsNum < 1.5 && selectedIDIsoElectronsNum < 0.5 && Bin < 900 && NJets>2.5 && MHT>300 && HT>300
+selection :: label: Elec_Baseline; apply to: ElecData; cuts: selectedIDIsoElectronsNum > 0.5 && selectedIDIsoElectronsNum < 1.5 && selectedIDIsoMuonsNum < 0.5 && MTW < 100 && Bin < 900 && NJets>2.5 && MHT>300 && HT>300
+selection :: label: Baseline+MTW<100; cuts: Mu_Baseline && Elec_Baseline
+
+
+#############################################################################################################
+style :: dataset: MuData; plot label: Data: #mu CS; marker: 10; color: 1
+style :: dataset: ElecData; plot label: Data: e CS; color: kBlue
+
+#############################################################################################################
+plot :: variable: HT; data: MuData; background:  ElecData; histogram: 18, 250, 2500, log
+plot :: variable: MHT; data: MuData; background: ElecData; histogram: 16, 250, 1050, log
+plot :: variable: MET; data: MuData; background: ElecData; histogram: 16, 250, 1050, log
+plot :: variable: NJets; data: MuData; background: ElecData; histogram: 9, 1.5, 10.5, log
+plot :: variable: BTags; data: MuData; background: ElecData; histogram: 6, -0.5, 5.5, log
+plot :: variable: MTW; data: MuData; background: ElecData; histogram: 40, 0, 250, log
+plot :: variable: NVtx; data: MuData; background: ElecData;  histogram: 25, -0.5, 49.5, log
+plot :: variable: Bin; data: MuData; background: ElecData; histogram: 190, 0, 190, log

@@ -1,0 +1,89 @@
+# Specify global parameters
+global :: id: SRvsCR_elmu_btag
+global :: lumi: 35.9
+#global :: input path: ~/xxl-af-cms/Lost_Lepton_delphiClass/
+#global :: input path: /nfs/dust/cms/user/kurzsimo/Plotting_FullStatus/
+global :: input path: /nfs/dust/cms/user/kurzsimo/LostLeptonExpectation_bTagPlotting/
+global :: publication status: Preliminary
+global :: output formats: pdf
+style :: plot yields: false 
+
+
+# Specify the variables that are read from the ntuple and their type
+variable :: name: HT; type: Double_t; label: H_{T}; unit: GeV
+variable :: name: MHT; type: Double_t; label: H_{T}^{miss}; unit: GeV
+variable :: name: MET; type: Double_t; label: E_{T}^{miss}; unit: GeV
+variable :: name: NJets; type: Int_t; label: N_{jet}
+variable :: name: BTags; type: Int_t; label: N_{b-jet}
+variable :: name: NVtx; type: Int_t; label: N(Vtx)
+variable :: name: MTW; type: Float_t; label: M_{T}(W); unit: GeV
+variable :: name: Bin; type: UShort_t; label: Search region bin number
+variable :: name: ElectronsNum; type: UShort_t
+variable :: name: ElectronsPt; type: Float_t; label: p_{T}(e)
+variable :: name: ElectronsEta; type: Float_t; label: #eta(e)
+variable :: name: MuonsNum; type: UShort_t
+variable :: name: MuonsPt; type: Float_t; label: p_{T}(#mu)
+variable :: name: MuonsEta; type: Float_t; label: #eta(#mu)
+variable :: name: DeltaPhi1; type: Double_t; label: #Delta#Phi_{1}
+variable :: name: DeltaPhi2; type: Double_t; label: #Delta#Phi_{2}
+variable :: name: DeltaPhi3; type: Double_t; label: #Delta#Phi_{3}
+variable :: name: DeltaPhi4; type: Double_t; label: #Delta#Phi_{4}
+
+# selection values
+variable :: name: Expectation; type: UShort_t
+variable :: name: ExpectationReductionIsoTrack; type: UShort_t
+
+#weights
+#variable :: name: Weight; type: Double_t
+variable :: name: Weight; type: Double_t
+
+#############################################################################################################
+# Specify the data source and label the type of data
+dataset :: label: MCExttjets; type: mc; files: Expectation_ttbar.root ; tree: LostLeptonExpectation; weight: Weight; scales : 35862
+dataset :: label: MCExwjets; type: mc; files: Expectation_wjets.root ; tree: LostLeptonExpectation; weight: Weight; scales : 35862
+dataset :: label: MCExsinglet; type: mc; files: Expectation_singlet.root ; tree: LostLeptonExpectation; weight: Weight; scales : 35862
+dataset :: label: MCExrare; type: mc; files: Expectation_rare.root ; tree: LostLeptonExpectation; weight: Weight ; scales : 35862
+#dataset :: label: MCExother; type: mc; files: Expectation_other.root ; tree: LostLeptonExpectation; weight: Weight ; scales : 35862
+
+#dataset :: label: MCCRall; type: mc; files: Prediction.root ; tree: LostLeptonPrediction; weight: Weight ; scales : 35862
+
+#############################################################################################################
+#special selection
+
+selection :: label: Baseline; cuts: HT > 250 && MHT > 250 && NJets > 1.5 && DeltaPhi1 > 0.5 && DeltaPhi2 > 0.5 && DeltaPhi3 > 0.3 && DeltaPhi4 > 0.3 && Bin < 500
+
+selection :: label: BaselineSR; cuts: Baseline && Expectation > 0.5 && Expectation < 1.5 && ExpectationReductionIsoTrack < 0.5; apply to: MCExttjets, MCExwjets, MCExsinglet, MCExrare
+
+selection :: label: BaselineMu; cuts: Baseline && MuonsNum > 0.5 && MuonsNum < 1.5 && ElectronsNum < 0.5; apply to: MCCRall
+selection :: label: BaselineElec; cuts: Baseline && ElectronsNum > 0.5 && ElectronsNum < 1.5 && MuonsNum < 0.5; apply to: MCCRall
+
+selection :: label: All; cuts: BaselineSR && BaselineMu && BaselineElec
+selection :: label: BTags0; cuts: All && BTags < 0.5
+selection :: label: BTags1Inf; cuts: All && BTags > 0.5
+selection :: label: BTags2Inf; cuts: All && BTags > 1.5
+
+
+
+#############################################################################################################
+style :: dataset: MCExttjets; plot label: MC: t#bar{t}; color: kBlue
+style :: dataset: MCExwjets; plot label: MC: W#rightarrowl#nu+jets; color: kGreen
+style :: dataset: MCExsinglet; plot label: MC: single t; color: kRed
+style :: dataset: MCExrare; plot label: MC: rare; color: kOrange
+#style :: dataset: MCExrare; plot label: MC: VV,VVV,ttV,tttt; color: kOrange
+#style :: dataset: MCExother; plot label: MC: other; color: kYellow
+
+style :: dataset: MCCRall; plot label: MC: e/#mu CR; marker: 10; color: 1
+
+#############################################################################################################
+plot :: variable: HT; data: MCCRall; background:  MCExrare + MCExsinglet + MCExwjets + MCExttjets; histogram: 22, 250, 3000, log
+plot :: variable: MHT; data: MCCRall; background: MCExrare + MCExsinglet + MCExwjets + MCExttjets; histogram: 20, 250, 1500, log
+plot :: variable: MET; data: MCCRall; background: MCExrare + MCExsinglet + MCExwjets + MCExttjets; histogram: 22, 125, 1500, log
+plot :: variable: NJets; data: MCCRall; background: MCExrare + MCExsinglet + MCExwjets + MCExttjets; histogram: 9, 1.5, 10.5, log
+plot :: variable: BTags; data: MCCRall; background: MCExrare + MCExsinglet + MCExwjets + MCExttjets; histogram: 3, -0.5, 2.5, log
+plot :: variable: MTW; data: MCCRall; background: MCExrare + MCExsinglet + MCExwjets + MCExttjets; histogram: 60, 0, 300, log
+plot :: variable: NVtx; data: MCCRall; background: MCExrare + MCExsinglet + MCExwjets + MCExttjets;  histogram: 25, -0.5, 49.5, log
+plot :: variable: Bin; data: MCCRall; background: MCExrare + MCExsinglet + MCExwjets + MCExttjets; histogram: 174, 0, 174, log
+plot :: variable: DeltaPhi1; data: MCCRall; background: MCExrare + MCExsinglet + MCExwjets + MCExttjets; histogram: 40, 0, 4, log
+plot :: variable: DeltaPhi2; data: MCCRall; background: MCExrare + MCExsinglet + MCExwjets + MCExttjets; histogram: 40, 0, 4, log
+plot :: variable: DeltaPhi3; data: MCCRall; background: MCExrare + MCExsinglet + MCExwjets + MCExttjets; histogram: 40, 0, 4, log
+plot :: variable: DeltaPhi4; data: MCCRall; background: MCExrare + MCExsinglet + MCExwjets + MCExttjets; histogram: 40, 0, 4, log

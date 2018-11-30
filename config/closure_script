@@ -1,0 +1,26 @@
+#!/bin/bash
+# My first script
+
+echo "Producing necessary closures!"
+#./run 2015_closure_combined_delphiClass.txt&
+#./run 2015_closure_combined_delphiClass_isoTrackReduction.txt&
+./run 2015_step_by_step_closure_Mu_CSDiLepMTWCorrected.txt&
+./run 2015_step_by_step_closure_Mu_MuIso.txt&
+./run 2015_step_by_step_closure_Mu_MuReco.txt&
+./run 2015_step_by_step_closure_Mu_MuAcc.txt&
+#./run 2015_step_by_step_closure_Mu_ElecAcc.txt&
+#./run 2015_step_by_step_closure_Mu_ElecReco.txt&
+#./run 2015_step_by_step_closure_Mu_ElecIso.txt&
+#./run 2015_step_by_step_closure_Elec_CSDiLepMTWCorrected.txt&
+#./run 2015_step_by_step_closure_Elec_MuIso.txt&
+#./run 2015_step_by_step_closure_Elec_MuReco.txt&
+#./run 2015_step_by_step_closure_Elec_MuAcc.txt&
+#./run 2015_step_by_step_closure_Elec_ElecAcc.txt&
+#./run 2015_step_by_step_closure_Elec_ElecReco.txt&
+#./run 2015_step_by_step_closure_Elec_ElecIso.txt&
+wait
+#./run 2015_step_by_step_closure_Elec_CSPurity.txt&
+#./run 2015_step_by_step_closure_Mu_CSPurity.txt&
+#wait
+
+echo "done"

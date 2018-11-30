@@ -1,0 +1,71 @@
+# Specify global parameters
+global :: id: Closure_Combined
+global :: lumi: 41.85
+global :: publication status: Preliminary
+global :: output formats: pdf
+style :: plot yields: true 
+
+
+# Specify the variables that are read from the ntuple and their type
+variable :: name: HT; type: Float_t; label: H_{T}; unit: GeV
+variable :: name: MHT; type: Float_t; label: H_{T}^{miss}; unit: GeV
+variable :: name: MET; type: Float_t; label: E_{T}^{miss}; unit: GeV
+variable :: name: NJets; type: UShort_t; label: N_{Jets}
+variable :: name: BTags; type: UShort_t; label: N_{BTags}
+variable :: name: NVtx; type: UShort_t; label: N(Vtx)
+variable :: name: MTW; type: Float_t; label: M_{T}(w)
+variable :: name: Bin; type: UShort_t; label: Bin
+
+# selection values
+variable :: name: Expectation; type: UShort_t
+variable :: name: ExpectationReductionIsoTrack; type: UShort_t
+
+#weights
+variable :: name: Weight; type: Float_t
+
+#prediction
+variable :: name: totalWeightDiLep; type: Float_t
+variable :: name: totalWeightDiLepIsoTrackReduced; type: Float_t
+
+
+variable :: name: selectedIDIsoMuonsNum; type: UShort_t
+variable :: name: selectedIDIsoElectronsNum; type: UShort_t
+#############################################################################################################
+# Specify the data source and label the type of data
+
+dataset :: label: MCExttjets; type: mc; files:/nfs/dust/cms/user/kurzsimo/LostLepton/Expectations_4fb_commissioning/Expectation_ttjets.root ; tree: LostLeptonExpectation; weight: Weight ; scales : 0.0104625
+dataset :: label: MCExwjets; type: mc; files:/nfs/dust/cms/user/kurzsimo/LostLepton/Expectations_4fb_commissioning/Expectation_wjets.root ; tree: LostLeptonExpectation; weight: Weight ; scales : 0.0104625
+dataset :: label: MCExsinglet; type: mc; files:/nfs/dust/cms/user/kurzsimo/LostLepton/Expectations_4fb_commissioning/Expectation_singlet.root ; tree: LostLeptonExpectation; weight: Weight ; scales : 0.0104625
+dataset :: label: CombinedPrMTWDiLep; type: data; files:/nfs/dust/cms/user/kurzsimo/LostLepton/Expectations_Data_commissioning/Prediction.root  ; tree: LostLeptonPrediction; weight: totalWeightDiLepIsoTrackReduced ; scales: 0.5
+
+
+#############################################################################################################
+#special selection
+#selection :: label: Baseline; cuts: Expectation < 1.5 (MCExttjets, MCExwjets, MCExsinglet) + Expectation > 0.5 (MCExttjets, MCExwjets, MCExsinglet) + ExpectationReductionIsoTrack < 0.5 (MCExttjets, MCExwjets, MCExsinglet) + NJets > 3.1 + MHT > 200 + HT > 500   + MTW < 100 (CombinedPrMTWDiLep) + selectedIDIsoMuonsNum > 0.5 (CombinedPrMTWDiLep)+  selectedIDIsoMuonsNum < 1.5 (CombinedPrMTWDiLep) + selectedIDIsoElectronsNum < 0.5 (CombinedPrMTWDiLep)
+
+selection :: label: Baseline_Exttjets; cuts:  Expectation == 1 && ExpectationReductionIsoTrack==0 ; apply to: MCExttjets
+selection :: label: Baseline_Exwjets; cuts:  Expectation == 1  && ExpectationReductionIsoTrack==0; apply to: MCExwjets
+selection :: label: Baseline_Exsinglet; cuts:  Expectation == 1  && ExpectationReductionIsoTrack==0; apply to: MCExsinglet
+selection :: label: Baseline_Pr; cuts:  MTW < 100; apply to: CombinedPrMTWDiLep
+#&& selectedIDIsoMuonsNum==1 && selectedIDIsoElectronsNum==0
+selection :: label: Baseline: MC scaled to data; cuts: Baseline_Exttjets && Baseline_Exwjets && Baseline_Exsinglet && Baseline_Pr && NJets > 3.1 && MHT > 200 && HT > 500
+#+N_{Jets}#geq3 (excl. #Delta#Phi_{1,2,3})
+
+
+#############################################################################################################
+style :: dataset: CombinedPrMTWDiLep; plot label: Data: Pred. Lost-Lepton; marker: 10; color: 1
+style :: dataset: MCExttjets; plot label: MC: t#bar{t}; color: kBlue
+style :: dataset: MCExwjets; plot label: MC: W#rightarrowl#nu+jets; color: kGreen
+style :: dataset: MCExsinglet; plot label: MC: single t; color: kRed
+
+#############################################################################################################
+plot :: variable: HT; data: CombinedPrMTWDiLep; background: MCExsinglet + MCExwjets + MCExttjets; histogram: 15, 500, 2000, log
+plot :: variable: MHT; data: CombinedPrMTWDiLep; background: MCExsinglet + MCExwjets + MCExttjets; histogram: 10, 200, 700, log
+plot :: variable: MET; data: CombinedPrMTWDiLep; background: MCExsinglet + MCExwjets + MCExttjets; histogram: 22, 200, 1300, log
+plot :: variable: NJets; data: CombinedPrMTWDiLep; background: MCExsinglet + MCExwjets + MCExttjets; histogram: 6, 4, 10, log
+plot :: variable: BTags; data: CombinedPrMTWDiLep; background: MCExsinglet + MCExwjets + MCExttjets; histogram: 6, 0, 6, log
+plot :: variable: MTW; data: CombinedPrMTWDiLep; background: MCExsinglet + MCExwjets + MCExttjets; histogram: 40, 0, 200, log
+plot :: variable: NVtx; data: CombinedPrMTWDiLep; background: MCExsinglet + MCExwjets + MCExttjets;  histogram: 25, -0.5, 49.5, log
+plot :: variable: Bin; data: CombinedPrMTWDiLep; background: MCExsinglet + MCExwjets + MCExttjets; histogram: 72, 0, 72, log
+
+

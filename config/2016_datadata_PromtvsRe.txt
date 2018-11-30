@@ -1,0 +1,70 @@
+# Specify global parameters
+global :: id: DataData_PromtvsRe
+global :: lumi: 20.1
+global :: input path: /nfs/dust/cms/user/kurzsimo/Plotting_ReReco/
+global :: publication status: Preliminary
+global :: output formats: pdf
+style :: plot yields: false 
+
+
+# Specify the variables that are read from the ntuple and their type
+variable :: name: HT; type: Double_t; label: H_{T}; unit: GeV
+variable :: name: MHT; type: Double_t; label: H_{T}^{miss}; unit: GeV
+variable :: name: MET; type: Double_t; label: E_{T}^{miss}; unit: GeV
+variable :: name: NJets; type: Int_t; label: N_{Jets}
+variable :: name: BTags; type: Int_t; label: N_{b}
+variable :: name: NVtx; type: Int_t; label: N(Vtx)
+variable :: name: MTW; type: Float_t; label: M_{T}(w)
+variable :: name: Bin; type: UShort_t; label: Bin
+variable :: name: ElectronsNum; type: UShort_t
+variable :: name: ElectronsPt; type: Float_t; label: p_{T}(e)
+variable :: name: ElectronsEta; type: Float_t; label: #eta(e)
+variable :: name: MuonsNum; type: UShort_t
+variable :: name: MuonsPt; type: Float_t; label: p_{T}(#mu)
+variable :: name: MuonsEta; type: Float_t; label: #eta(#mu)
+variable :: name: DeltaPhi1; type: Double_t; label: #Delta#Phi_{1}
+variable :: name: DeltaPhi2; type: Double_t; label: #Delta#Phi_{2}
+variable :: name: DeltaPhi3; type: Double_t; label: #Delta#Phi_{3}
+variable :: name: DeltaPhi4; type: Double_t; label: #Delta#Phi_{4}
+
+#weights
+variable :: name: Weight; type: Double_t
+
+#############################################################################################################
+# Specify the data source and label the type of data
+
+dataset :: label: DataRe; type: data; files: Prediction_data_BtoF_ReReco.root  ; tree: LostLeptonPrediction; scales:1
+dataset :: label: DataPromt; type: mc; files: Prediction_data_BtoF_PromtReco.root  ; tree: LostLeptonPrediction; scales:1
+
+
+#############################################################################################################
+#special selection
+selection :: label: Baseline; cuts: HT > 250 && MHT > 250 && NJets > 1.5 && MTW < 100 && DeltaPhi1 > 0.5 && DeltaPhi2 > 0.5 && DeltaPhi3 > 0.3 && DeltaPhi4 > 0.3 && Bin < 500
+
+selection :: label: BaselineMu; cuts: Baseline && MuonsNum > 0.5 && MuonsNum < 1.5 && ElectronsNum < 0.5
+selection :: label: BaselineElec; cuts: Baseline && ElectronsNum > 0.5 && ElectronsNum < 1.5 && MuonsNum < 0.5
+
+selection :: label: NJets2; cuts: BaselineMu && NJets < 2.5
+
+
+#############################################################################################################
+style :: dataset: DataRe; plot label: Data: e/#mu CS (ReReco); marker: 10; color: 1
+style :: dataset: DataPromt; plot label: Data: e/#mu CS (PromtReco); color: kBlue
+
+#############################################################################################################
+plot :: variable: HT; data: DataRe; background:  DataPromt; histogram: 22, 250, 3000, log
+plot :: variable: MHT; data: DataRe; background: DataPromt; histogram: 20, 250, 1500, log
+plot :: variable: MET; data: DataRe; background: DataPromt; histogram: 22, 125, 1500, log
+plot :: variable: NJets; data: DataRe; background: DataPromt; histogram: 9, 1.5, 10.5, log
+plot :: variable: BTags; data: DataRe; background: DataPromt; histogram: 3, -0.5, 2.5, log
+plot :: variable: MTW; data: DataRe; background: DataPromt; histogram: 60, 0, 300, log
+plot :: variable: NVtx; data: DataRe; background: DataPromt;  histogram: 25, -0.5, 49.5, log
+plot :: variable: Bin; data: DataRe; background: DataPromt; histogram: 174, 0, 174, log
+plot :: variable: ElectronsPt; data: DataRe; background: DataPromt; histogram: 25, 0, 500, log
+plot :: variable: ElectronsEta; data: DataRe; background: DataPromt; histogram: 20, -2.6, 2.6, log
+plot :: variable: MuonsPt; data: DataRe; background: DataPromt; histogram: 25, 0, 500, log
+plot :: variable: MuonsEta; data: DataRe; background: DataPromt; histogram: 20, -2.6, 2.6, log
+plot :: variable: DeltaPhi1; data: DataRe; background: DataPromt; histogram: 40, 0, 4, log
+plot :: variable: DeltaPhi2; data: DataRe; background: DataPromt; histogram: 40, 0, 4, log
+plot :: variable: DeltaPhi3; data: DataRe; background: DataPromt; histogram: 40, 0, 4, log
+plot :: variable: DeltaPhi4; data: DataRe; background: DataPromt; histogram: 40, 0, 4, log

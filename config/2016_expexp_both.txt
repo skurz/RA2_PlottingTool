@@ -1,0 +1,82 @@
+# Specify global parameters
+global :: id: SR_ExpExp_woWjets
+global :: lumi: 36.3
+#global :: input path: ~/xxl-af-cms/Lost_Lepton_delphiClass/
+global :: input path: /nfs/dust/cms/user/kurzsimo/
+global :: publication status: Preliminary
+global :: output formats: pdf
+style :: plot yields: false 
+
+
+# Specify the variables that are read from the ntuple and their type
+variable :: name: HT; type: Double_t; label: H_{T}; unit: GeV
+variable :: name: MHT; type: Double_t; label: H_{T}^{miss}; unit: GeV
+variable :: name: MET; type: Double_t; label: E_{T}^{miss}; unit: GeV
+variable :: name: NJets; type: Int_t; label: N_{Jets}
+variable :: name: BTags; type: Int_t; label: N_{b}
+variable :: name: NVtx; type: Int_t; label: N(Vtx)
+variable :: name: MTW; type: Float_t; label: M_{T}(w)
+variable :: name: Bin; type: UShort_t; label: Bin
+variable :: name: ElectronsNum; type: UShort_t
+variable :: name: ElectronsPt; type: Float_t; label: p_{T}(e)
+variable :: name: ElectronsEta; type: Float_t; label: #eta(e)
+variable :: name: MuonsNum; type: UShort_t
+variable :: name: MuonsPt; type: Float_t; label: p_{T}(#mu)
+variable :: name: MuonsEta; type: Float_t; label: #eta(#mu)
+variable :: name: GenElectronsNum; type: UShort_t
+variable :: name: GenElectronsPt; type: Float_t; label: p_{T}(e)
+variable :: name: GenElectronsEta; type: Float_t; label: #eta(e)
+variable :: name: GenMuonsNum; type: UShort_t
+variable :: name: GenMuonsPt; type: Float_t; label: p_{T}(#mu)
+variable :: name: GenMuonsEta; type: Float_t; label: #eta(#mu)
+variable :: name: isoTracksNum; type: Int_t; label: N(isotrks)
+variable :: name: DeltaPhi1; type: Double_t; label: #Delta#Phi_{1}
+variable :: name: DeltaPhi2; type: Double_t; label: #Delta#Phi_{2}
+variable :: name: DeltaPhi3; type: Double_t; label: #Delta#Phi_{3}
+variable :: name: DeltaPhi4; type: Double_t; label: #Delta#Phi_{4}
+
+# selection values
+variable :: name: Expectation; type: UShort_t
+variable :: name: ExpectationReductionIsoTrack; type: UShort_t
+
+#weights
+variable :: name: Weight; type: Double_t
+
+#############################################################################################################
+# Specify the data source and label the type of data
+dataset :: label: MCExpNew; type: mc; files: Expectation_woWjets_pT300.root ; tree: LostLeptonExpectation; weight: Weight; scales : 36300
+
+dataset :: label: MCExp; type: mc; files: Expectation_woWjets.root ; tree: LostLeptonExpectation; weight: Weight; scales : 36300
+
+
+#############################################################################################################
+#special selection
+
+selection :: label: BaselineExp; cuts: HT > 250 && MHT > 250 && NJets > 1.5 && DeltaPhi1 > 0.5 && DeltaPhi2 > 0.5 && DeltaPhi3 > 0.3 && DeltaPhi4 > 0.3 && Bin < 500 && Expectation > 0.5 && Expectation < 1.5 && ExpectationReductionIsoTrack < 0.5;
+
+selection :: label: BaselineExpMu; cuts: BaselineExp && GenMuonsNum > 0.5 && GenMuonsNum < 1.5 && GenElectronsNum < 0.5;
+selection :: label: BaselineExpElec; cuts: BaselineExp && GenElectronsNum > 0.5 && GenElectronsNum < 1.5 && GenMuonsNum < 0.5;
+
+
+#############################################################################################################
+style :: dataset: MCExpNew; plot label: MC(scaled): e/#mu Exp.; marker: 10; color: 1
+style :: dataset: MCExp; plot label: MC: e/#mu Exp.; color: kBlue
+
+
+#############################################################################################################
+plot :: variable: HT; data: MCExpNew; background:  MCExp; histogram: 22, 250, 3000, log
+plot :: variable: MHT; data: MCExpNew; background: MCExp; histogram: 20, 250, 1500, log
+plot :: variable: MET; data: MCExpNew; background: MCExp; histogram: 22, 125, 1500, log
+plot :: variable: NJets; data: MCExpNew; background: MCExp; histogram: 9, 1.5, 10.5, log
+plot :: variable: BTags; data: MCExpNew; background: MCExp; histogram: 3, -0.5, 2.5, log
+plot :: variable: MTW; data: MCExpNew; background: MCExp; histogram: 60, 0, 300, log
+plot :: variable: NVtx; data: MCExpNew; background: MCExp;  histogram: 25, -0.5, 49.5, log
+plot :: variable: Bin; data: MCExpNew; background: MCExp; histogram: 174, 0, 174, log
+plot :: variable: GenElectronsPt; data: MCExpNew; background: MCExp; histogram: 25, 0, 500, log
+plot :: variable: GenElectronsEta; data: MCExpNew; background: MCExp; histogram: 20, -2.6, 2.6, log
+plot :: variable: GenMuonsPt; data: MCExpNew; background: MCExp; histogram: 25, 0, 500, log
+plot :: variable: GenMuonsEta; data: MCExpNew; background: MCExp; histogram: 20, -2.6, 2.6, log
+plot :: variable: DeltaPhi1; data: MCExpNew; background: MCExp; histogram: 40, 0, 4, log
+plot :: variable: DeltaPhi2; data: MCExpNew; background: MCExp; histogram: 40, 0, 4, log
+plot :: variable: DeltaPhi3; data: MCExpNew; background: MCExp; histogram: 40, 0, 4, log
+plot :: variable: DeltaPhi4; data: MCExpNew; background: MCExp; histogram: 40, 0, 4, log

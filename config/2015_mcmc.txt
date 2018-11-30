@@ -1,0 +1,59 @@
+# Specify global parameters
+global :: id: Closure_MCMC
+global :: lumi: 3000
+global :: publication status: Preliminary
+global :: output formats: pdf
+style :: plot yields: true 
+
+
+# Specify the variables that are read from the ntuple and their type
+event content :: name: HT; type: Float_t; label: H_{T}; unit: GeV
+event content :: name: MHT; type: Float_t; label: #slash{H}_{T}; unit: GeV
+event content :: name: MET; type: Float_t; label: #slash{E}_{T}; unit: GeV
+event content :: name: NJets; type: UShort_t; label: N_{Jets}
+event content :: name: BTags; type: UShort_t; label: N_{BTags}
+event content :: name: NVtx; type: UShort_t; label: N(Vtx)
+event content :: name: MTW; type: Float_t; label: M_{T}(w)
+event content :: name: Bin; type: UShort_t; label: Bin
+
+# selection values
+event content :: name: Expectation; type: UShort_t
+event content :: name: ExpectationReductionIsoTrack; type: UShort_t
+
+#weights
+event content :: name: Weight; type: Float_t
+
+
+event content :: name: selectedIDIsoMuonsNum; type: UShort_t
+event content :: name: selectedIDIsoElectronsNum; type: UShort_t
+#############################################################################################################
+# Specify the data source and label the type of data
+
+dataset :: label: spring15; type: mc; file:/nfs/dust/cms/user/kurzsimo/LostLepton/Expectations_25ns/Expectation.root ; tree: LostLeptonExpectation; weight: Weight ; scale : 1
+dataset :: label: spring14; type: mc; file:/nfs/dust/cms/user/kurzsimo/LostLepton/Expectations/Expectation.root  ; tree: LostLeptonExpectation; weight: Weight ; scale: 0.75
+
+
+#############################################################################################################
+#special selection
+#selection :: label: Baseline; cuts: NJets > 3.1 + MHT > 200 + HT > 500 + selectedIDIsoElectronsNum > 0.5 + selectedIDIsoElectronsNum < 1.5 + selectedIDIsoMuonsNum < 0.5
+selection :: label: Baseline; cuts: NJets > 3.1 + MHT > 200 + HT > 500 + selectedIDIsoMuonsNum > 0.5 + selectedIDIsoMuonsNum < 1.5 + selectedIDIsoElectronsNum < 0.5
+
+
+
+#############################################################################################################
+plot style :: dataset: spring15; plot label: #mu CS (Spring15); marker: 10; color: 1
+plot style :: dataset: spring14; plot label:#mu CS (Spring14); color: kBlue
+
+
+#############################################################################################################
+
+plot :: variable: HT; data: spring15; background: spring14; histogram: 15, 500, 2000, log
+plot :: variable: MHT; data: spring15; background: spring14; histogram: 5, 200, 700, log
+plot :: variable: MET; data: spring15; background: spring14; histogram: 22, 200, 1300, log
+plot :: variable: NJets; data: spring15; background: spring14; histogram: 7, 4, 10, log
+plot :: variable: BTags; data: spring15; background: spring14; histogram: 5, 0, 5, log
+plot :: variable: MTW; data: spring15; background: spring14; histogram: 40, 0, 200, log
+plot :: variable: NVtx; data: spring15; background: spring14;  histogram: 25, -0.5, 49.5, log
+plot :: variable: Bin; data: spring15; background: spring14; histogram: 72, 0, 72, log
+
+

@@ -1,0 +1,129 @@
+# Specify global parameters
+global :: id: Elec_Closure
+global :: lumi: 5
+global :: publication status: Preliminary
+global :: output formats: eps, pdf
+style :: plot yields: true 
+
+
+# Specify the variables that are read from the ntuple and their type
+event content :: name: HT; type: Float_t; label: H_{T}; unit: GeV
+event content :: name: MHT; type: Float_t; label: #slash{H}_{T}; unit: GeV
+event content :: name: MET; type: Float_t; label: #slash{E}_{T}; unit: GeV
+event content :: name: NJets; type: Int_t; label: N_{Jets}
+event content :: name: BTags; type: Int_t; label: BTags
+event content :: name: NVtx; type: UShort_t; label: N(Vtx)
+event content :: name: MTW; type: Float_t; label: M_{T}(w)
+
+event content :: name: DeltaPhi1; type: Float_t; label: #Delta#Phi_{1}
+event content :: name: DeltaPhi2; type: Float_t; label: #Delta#Phi_{2}
+event content :: name: DeltaPhi3; type: Float_t; label: #Delta#Phi_{3}
+
+# selection values
+event content :: name: Expectation; type: Int_t
+
+event content :: name: elecAcc; type: Int_t
+event content :: name: elecReco; type: Int_t
+event content :: name: elecIso; type: Int_t
+
+#weights
+event content :: name: Weight; type: Float_t
+
+#prediction
+event content :: name: elecAccWeight; type: Float_t
+event content :: name: elecRecoWeight; type: Float_t
+event content :: name: elecIsoWeight; type: Float_t
+
+event content :: name: ElecCSElecAccWeight; type: Float_t
+event content :: name: ElecCSElecRecoWeight; type: Float_t
+event content :: name: ElecCSElecIsoWeight; type: Float_t
+
+event content :: name: selectedIDIsoMuonsNum; type: Int_t
+event content :: name: selectedIDIsoElectronsNum; type: Int_t
+#############################################################################################################
+# Specify the data source and label the type of data
+
+dataset :: label:ElecExAcc; type: mc; file:/nfs/dust/cms/user/adraeger/phys14/mc/lostlepton/Expectation.root ; tree: LostLeptonExpectation; weight: Weight
+dataset :: label:ElecExReco; type: mc; file:/nfs/dust/cms/user/adraeger/phys14/mc/lostlepton/Expectation.root ; tree: LostLeptonExpectation; weight: Weight
+dataset :: label:ElecExIso; type: mc; file:/nfs/dust/cms/user/adraeger/phys14/mc/lostlepton/Expectation.root ; tree: LostLeptonExpectation; weight: Weight
+
+dataset :: label: MuCSPrAcc; type: mcprediction; file:/nfs/dust/cms/user/adraeger/phys14/mc/lostlepton/Prediction.root  ; tree: LostLeptonPrediction; weight: elecAccWeight
+dataset :: label: MuCSPrReco; type: mcprediction; file:/nfs/dust/cms/user/adraeger/phys14/mc/lostlepton/Prediction.root  ; tree: LostLeptonPrediction; weight: elecRecoWeight
+dataset :: label: MuCSPrIso; type: mcprediction; file:/nfs/dust/cms/user/adraeger/phys14/mc/lostlepton/Prediction.root  ; tree: LostLeptonPrediction; weight: elecIsoWeight
+
+dataset :: label: ElecCSPrAcc; type: mcprediction; file:/nfs/dust/cms/user/adraeger/phys14/mc/lostlepton/Prediction.root  ; tree: LostLeptonPrediction; weight: ElecCSElecAccWeight
+dataset :: label: ElecCSPrReco; type: mcprediction; file:/nfs/dust/cms/user/adraeger/phys14/mc/lostlepton/Prediction.root  ; tree: LostLeptonPrediction; weight: ElecCSElecRecoWeight
+dataset :: label: ElecCSPrIso; type: mcprediction; file:/nfs/dust/cms/user/adraeger/phys14/mc/lostlepton/Prediction.root  ; tree: LostLeptonPrediction; weight: ElecCSElecIsoWeight
+
+
+
+
+#############################################################################################################
+#special selection
+selection :: label: Baseline; cuts: DeltaPhi1 > 0.5 + DeltaPhi2 > 0.5 + DeltaPhi3 > 0.3 + NJets > 2.1 + MHT > 100 + HT > 500   + MTW < 100 + elecAcc < 0.5 (ElecExAcc) + elecReco < 0.5 (ElecExReco) + elecIso < 0.5 (ElecExIso) + MTW < 100 (MuCSPrAcc, MuCSPrReco, MuCSPrIso, ElecCSPrAcc, ElecCSPrReco, ElecCSPrIso) + selectedIDIsoMuonsNum > 0.5 (MuCSPrAcc, MuCSPrReco, MuCSPrIso)+  selectedIDIsoMuonsNum < 1.5 (MuCSPrAcc, MuCSPrReco, MuCSPrIso) + selectedIDIsoElectronsNum < 0.5 (MuCSPrAcc, MuCSPrReco, MuCSPrIso) + selectedIDIsoElectronsNum > 0.5 (ElecCSPrAcc, ElecCSPrReco, ElecCSPrIso)+  selectedIDIsoElectronsNum < 1.5 (ElecCSPrAcc, ElecCSPrReco, ElecCSPrIso) + selectedIDIsoMuonsNum < 0.5 (ElecCSPrAcc, ElecCSPrReco, ElecCSPrIso)
+
+
+#############################################################################################################
+
+plot style :: dataset: ElecCSPrAcc; plot label: Pred e CS; color: kRed+1
+plot style :: dataset: MuCSPrAcc; plot label: Pred #mu CS; color: kBlue+1
+plot style :: dataset:ElecExAcc; plot label: t#bar{t} W#rightarrowl#nu+jets e Acc; marker: 10; color: 1
+
+plot style :: dataset: ElecCSPrReco; plot label: Pred e CS; color: kRed+1
+plot style :: dataset: MuCSPrReco; plot label: Pred #mu CS; color: kBlue+1
+plot style :: dataset:ElecExReco; plot label: t#bar{t} W#rightarrowl#nu+jets e reco; marker: 10; color: 1
+
+plot style :: dataset: ElecCSPrIso; plot label: Pred e CS; color: kRed+1
+plot style :: dataset: MuCSPrIso; plot label: Pred #mu CS; color: kBlue+1
+plot style :: dataset:ElecExIso; plot label: t#bar{t} W#rightarrowl#nu+jets e iso; marker: 10; color: 1
+
+#############################################################################################################
+
+plot :: variable: HT; data:ElecExAcc; background: MuCSPrAcc; histogram: 25, 500, 3000, log
+plot :: variable: MHT; data:ElecExAcc; background: MuCSPrAcc; histogram: 24, 100, 1300, log
+plot :: variable: MET; data:ElecExAcc; background: MuCSPrAcc; histogram: 24, 100, 1300, log
+plot :: variable: NJets; data:ElecExAcc; background: MuCSPrAcc; histogram: 10, 3, 13, log
+plot :: variable: BTags; data:ElecExAcc; background: MuCSPrAcc; histogram: 5, 0, 5, log
+plot :: variable: MTW; data:ElecExAcc; background: MuCSPrAcc; histogram: 40, 0, 200, log
+plot :: variable: NVtx; data:ElecExAcc; background: MuCSPrAcc;  histogram: 25, -0.5, 49.5, log
+
+plot :: variable: HT; data:ElecExAcc; background: ElecCSPrAcc; histogram: 25, 500, 3000, log
+plot :: variable: MHT; data:ElecExAcc; background: ElecCSPrAcc; histogram: 24, 100, 1300, log
+plot :: variable: MET; data:ElecExAcc; background: ElecCSPrAcc; histogram: 24, 100, 1300, log
+plot :: variable: NJets; data:ElecExAcc; background: ElecCSPrAcc; histogram: 10, 3, 13, log
+plot :: variable: BTags; data:ElecExAcc; background: ElecCSPrAcc; histogram: 5, 0, 5, log
+plot :: variable: MTW; data:ElecExAcc; background: ElecCSPrAcc; histogram: 40, 0, 200, log
+plot :: variable: NVtx; data:ElecExAcc; background: ElecCSPrAcc;  histogram: 25, -0.5, 49.5, log
+
+
+plot :: variable: HT; data:ElecExReco; background: MuCSPrReco; histogram: 25, 500, 3000, log
+plot :: variable: MHT; data:ElecExReco; background: MuCSPrReco; histogram: 24, 100, 1300, log
+plot :: variable: MET; data:ElecExReco; background: MuCSPrReco; histogram: 24, 100, 1300, log
+plot :: variable: NJets; data:ElecExReco; background: MuCSPrReco; histogram: 10, 3, 13, log
+plot :: variable: BTags; data:ElecExReco; background: MuCSPrReco; histogram: 5, 0, 5, log
+plot :: variable: MTW; data:ElecExReco; background: MuCSPrReco; histogram: 40, 0, 200, log
+plot :: variable: NVtx; data:ElecExReco; background: MuCSPrReco;  histogram: 25, -0.5, 49.5, log
+
+plot :: variable: HT; data:ElecExReco; background: ElecCSPrReco; histogram: 25, 500, 3000, log
+plot :: variable: MHT; data:ElecExReco; background: ElecCSPrReco; histogram: 24, 100, 1300, log
+plot :: variable: MET; data:ElecExReco; background: ElecCSPrReco; histogram: 24, 100, 1300, log
+plot :: variable: NJets; data:ElecExReco; background: ElecCSPrReco; histogram: 10, 3, 13, log
+plot :: variable: BTags; data:ElecExReco; background: ElecCSPrReco; histogram: 5, 0, 5, log
+plot :: variable: MTW; data:ElecExReco; background: ElecCSPrReco; histogram: 40, 0, 200, log
+plot :: variable: NVtx; data:ElecExReco; background: ElecCSPrReco;  histogram: 25, -0.5, 49.5, log
+
+plot :: variable: HT; data:ElecExIso; background: MuCSPrIso; histogram: 25, 500, 3000, log
+plot :: variable: MHT; data:ElecExIso; background: MuCSPrIso; histogram: 24, 100, 1300, log
+plot :: variable: MET; data:ElecExIso; background: MuCSPrIso; histogram: 24, 100, 1300, log
+plot :: variable: NJets; data:ElecExIso; background: MuCSPrIso; histogram: 10, 3, 13, log
+plot :: variable: BTags; data:ElecExIso; background: MuCSPrIso; histogram: 5, 0, 5, log
+plot :: variable: MTW; data:ElecExIso; background: MuCSPrIso; histogram: 40, 0, 200, log
+plot :: variable: NVtx; data:ElecExIso; background: MuCSPrIso;  histogram: 25, -0.5, 49.5, log
+
+plot :: variable: HT; data:ElecExIso; background: ElecCSPrIso; histogram: 25, 500, 3000, log
+plot :: variable: MHT; data:ElecExIso; background: ElecCSPrIso; histogram: 24, 100, 1300, log
+plot :: variable: MET; data:ElecExIso; background: ElecCSPrIso; histogram: 24, 100, 1300, log
+plot :: variable: NJets; data:ElecExIso; background: ElecCSPrIso; histogram: 10, 3, 13, log
+plot :: variable: BTags; data:ElecExIso; background: ElecCSPrIso; histogram: 5, 0, 5, log
+plot :: variable: MTW; data:ElecExIso; background: ElecCSPrIso; histogram: 40, 0, 200, log
+plot :: variable: NVtx; data:ElecExIso; background: ElecCSPrIso;  histogram: 25, -0.5, 49.5, log

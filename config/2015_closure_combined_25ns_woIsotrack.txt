@@ -1,0 +1,69 @@
+# Specify global parameters
+global :: id: Closure_Combined_woIsotrack
+global :: lumi: 3000
+global :: publication status: Preliminary
+global :: output formats: pdf
+style :: plot yields: true 
+
+
+# Specify the variables that are read from the ntuple and their type
+variable :: name: HT; type: Double_t; label: H_{T}; unit: GeV
+variable :: name: MHT; type: Double_t; label: H_{T}^{miss}; unit: GeV
+variable :: name: MET; type: Double_t; label: E_{T}^{miss}; unit: GeV
+variable :: name: NJets; type: Int_t; label: N_{Jets}
+variable :: name: BTags; type: Int_t; label: N_{b}
+variable :: name: NVtx; type: Int_t; label: N(Vtx)
+variable :: name: MTW; type: Float_t; label: M_{T}(w)
+variable :: name: Bin; type: UShort_t; label: Bin
+variable :: name: BinQCD; type: UShort_t; label: BinQCD
+
+# selection values
+variable :: name: Expectation; type: UShort_t
+variable :: name: ExpectationReductionIsoTrack; type: UShort_t
+
+#weights
+variable :: name: Weight; type: Double_t
+
+#prediction
+variable :: name: totalWeightDiLep; type: Float_t
+variable :: name: totalWeightDiLepIsoTrackReduced; type: Float_t
+
+
+variable :: name: selectedIDIsoMuonsNum; type: UShort_t
+variable :: name: selectedIDIsoElectronsNum; type: UShort_t
+#############################################################################################################
+# Specify the data source and label the type of data
+
+dataset :: label: MCEx; type: mc; files:~/xxl-af-cms/Lost_Lepton_delphiClass/Expectation.root ; tree: LostLeptonExpectation; weight: Weight ; scales: 3000
+dataset :: label: MuPrMTWDiLep; type: mcprediction; files:~/xxl-af-cms/Lost_Lepton_delphiClass/Prediction.root  ; tree: LostLeptonPrediction; weight: totalWeightDiLep ; scales:1500
+dataset :: label: ElecPrMTWDiLep; type: mcprediction; files:~/xxl-af-cms/Lost_Lepton_delphiClass/Prediction.root  ; tree: LostLeptonPrediction; weight: totalWeightDiLep ; scales:1500
+
+#############################################################################################################
+#special selection
+#selection :: label: Baseline; cuts: Expectation < 1.5 (MCEx) + Expectation > 0.5 (MCEx) + NJets > 3.1 + MHT > 200 + HT > 500   + MTW < 100 ( MuPrMTWDiLep, ElecPrMTWDiLep) + selectedIDIsoMuonsNum > 0.5 ( MuPrMTWDiLep)+  selectedIDIsoMuonsNum < 1.5 ( MuPrMTWDiLep) + selectedIDIsoElectronsNum < 0.5 ( MuPrMTWDiLep) +  selectedIDIsoMuonsNum <0.5(ElecPrMTWDiLep) + selectedIDIsoElectronsNum >0.5 (ElecPrMTWDiLep) + selectedIDIsoElectronsNum < 1.5 (ElecPrMTWDiLep)
+
+#selection :: label: Baseline_MCEx; cuts:  Expectation == 1 && ExpectationReductionIsoTrack==0; apply to: MCEx
+selection :: label: Baseline_MCEx; cuts:  Expectation == 1; apply to: MCEx
+selection :: label: Baseline_MuPr; cuts:  MTW < 100 && selectedIDIsoMuonsNum==1 && selectedIDIsoElectronsNum==0; apply to: MuPrMTWDiLep
+selection :: label: Baseline_ElecPr; cuts:  MTW < 100 && selectedIDIsoMuonsNum==0 && selectedIDIsoElectronsNum==1; apply to: ElecPrMTWDiLep
+
+selection :: label: Baseline; cuts: Baseline_MCEx && Baseline_MuPr && Baseline_ElecPr && NJets > 3.1 && MHT > 200 && HT > 500
+#+N_{Jets}#geq3 (excl. #Delta#Phi_{1,2,3})
+
+
+#############################################################################################################
+style :: dataset: ElecPrMTWDiLep; plot label: MC: Pred. from e CS; color: kRed+1
+style :: dataset: MuPrMTWDiLep; plot label: MC: Pred. from #mu CS; color: kBlue+1
+style :: dataset: MCEx; plot label: MC: Exp. LostLepton; marker: 10; color: kBlack
+#style :: dataset: MCEx; plot label: MC: LostLep. Exp. (t#bar{t}, W+jets, single t); marker: 10; color: kBlack
+
+#############################################################################################################
+plot :: variable: HT; data: MCEx; background: ElecPrMTWDiLep + MuPrMTWDiLep; histogram: 20, 500, 2500, log
+plot :: variable: MHT; data: MCEx; background: ElecPrMTWDiLep + MuPrMTWDiLep; histogram: 16, 200, 1000, log
+plot :: variable: MET; data: MCEx; background: ElecPrMTWDiLep + MuPrMTWDiLep; histogram: 22, 200, 1300, log
+plot :: variable: NJets; data: MCEx; background: ElecPrMTWDiLep + MuPrMTWDiLep; histogram: 7, 3.5, 10.5, log
+plot :: variable: BTags; data: MCEx; background: ElecPrMTWDiLep + MuPrMTWDiLep; histogram: 7, -0.5, 6.5, log
+plot :: variable: MTW; data: MCEx; background: ElecPrMTWDiLep + MuPrMTWDiLep; histogram: 40, 0, 200, log
+plot :: variable: NVtx; data: MCEx; background: ElecPrMTWDiLep + MuPrMTWDiLep;  histogram: 25, -0.5, 49.5, log
+plot :: variable: Bin; data: MCEx; background: ElecPrMTWDiLep + MuPrMTWDiLep; histogram: 72, 0, 72, log
+plot :: variable: BinQCD; data: MCEx; background: ElecPrMTWDiLep + MuPrMTWDiLep; histogram: 220, 0, 220, log

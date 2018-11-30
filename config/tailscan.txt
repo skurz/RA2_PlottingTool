@@ -1,0 +1,84 @@
+# Specify global parameters
+global :: id: RA2_535-ABCD
+global :: lumi: 19.47
+
+
+# Specify the variables that are read from the ntuple and their type
+variable :: name: RunNum; type: UInt_t
+variable :: name: LumiBlockNum; type: UInt_t
+variable :: name: EvtNum; type: UInt_t
+variable :: name: HT; type: Float_t; label: H_{T}; unit: GeV
+variable :: name: MHT; type: Float_t; label: #slash{H}_{T}; unit: GeV
+variable :: name: NJets; type: UShort_t; label: N(Jets)
+variable :: name: NVtx; type: UShort_t; label: N(Vtx)
+variable :: name: DeltaPhi1; type: Float_t; label: #Delta#Phi_{1}
+variable :: name: DeltaPhi2; type: Float_t; label: #Delta#Phi_{2}
+variable :: name: DeltaPhi3; type: Float_t; label: #Delta#Phi_{3}
+variable :: name: Weight; type: Float_t
+
+variable :: name: Filter_HBHENoiseFilterRA2; type: UChar_t
+variable :: name: Filter_beamHaloFilter; type: UChar_t
+variable :: name: Filter_trackingFailureFilter; type: UChar_t
+variable :: name: Filter_inconsistentMuons; type: UChar_t
+variable :: name: Filter_greedyMuons; type: UChar_t
+variable :: name: Filter_ra2EcalTPFilter; type: UChar_t
+variable :: name: Filter_ra2EcalBEFilter; type: UChar_t
+variable :: name: Filter_hcalLaserEventFilter; type: UChar_t
+variable :: name: Filter_ecalLaserCorrFilter; type: UChar_t
+variable :: name: Filter_eeBadScFilter; type: UChar_t
+variable :: name: Filter_PBNRFilter; type: UChar_t
+variable :: name: Filter_HCALLaserEvtFilterList2012; type: UChar_t
+variable :: name: Filter_manystripclus53X; type: UChar_t
+variable :: name: Filter_toomanystripclus53X; type: UChar_t
+variable :: name: Filter_logErrorTooManyClusters; type: UChar_t
+variable :: name: Filter_RA2HONoiseFilter; type: UChar_t
+
+
+
+
+
+# Specify the data source and label the type of data
+## 535 V4
+dataset :: label: Data; type: data; file: /scratch/hh/dust/naf/cms/user/mschrode/RA2/ntuple/535_V4__new/RA2Ntuple_Run2012-ABCv1ReReco-Cv2DPromptReco_V4_HLTSel_JetMETInfo_FilterInfo.root; tree: RA2TreeMaker/RA2PreSelection;
+
+#dataset :: label: TTbar; type: mc; file: /scratch/hh/dust/naf/cms/user/mschrode/RA2/ntuple/535_V4/RA2Ntuple_TTJets_SemiFullLeptMGDecays_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A_ext-v1_V4_JetMETInfo_FilterInfo.root; tree: RA2TreeMaker/RA2PreSelection; weight: Weight;
+
+#dataset :: label: ZJets; type: mc; file: /scratch/hh/dust/naf/cms/user/mschrode/RA2/ntuple/535_V4/RA2Ntuple_ZJetsToNuNu_400_HT_inf_TuneZ2Star_8TeV_madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1_V4_JetMETInfo_FilterInfo.root; tree: RA2TreeMaker/RA2PreSelection; weight: Weight;
+
+#dataset :: label: WJets; type: mc; file: /scratch/hh/dust/naf/cms/user/mschrode/RA2/ntuple/535_V4/RA2Ntuple_WJetsToLNu_HT-400ToInf_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1_V4_JetMETInfo_FilterInfo.root; tree: RA2TreeMaker/RA2PreSelection; weight: Weight;
+
+#dataset :: label: QCD; type: mc; file: /scratch/hh/dust/naf/cms/user/mschrode/RA2/ntuple/535_V4__new/RA2Ntuple_QCD_HT250-Inf_TuneZ2star_8TeV-madgraph-pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1_V4_JetMETInfo_FilterInfo.root; tree: RA2TreeMaker/RA2PreSelection; weight: Weight;
+
+#dataset :: label: T1tttt; type: signal; file: /afs/naf.desy.de/user/m/mschrode/scratch/tmp/T1ttt_mother1100_LSP50.root; tree: RA2TreeMaker/RA2PreSelection; weight: Weight;
+
+# Selection
+selection :: label: baseline; cuts: HT > 500 + MHT > 200 + NJets > 2 + DeltaPhi1 > 0.5 + DeltaPhi2 > 0.5 + DeltaPhi3 > 0.3
+
+#selection :: label: HBHENoise; cuts: baseline + Filter_HBHENoiseFilterRA2>0
+#selection :: label: BeamHalo; cuts: baseline + Filter_beamHaloFilter>0
+#selection :: label: TrackingFailure; cuts: baseline + Filter_trackingFailureFilter>0
+#selection :: label: InconsistentMuons; cuts: baseline + Filter_inconsistentMuons>0
+#selection :: label: GreedyMuons; cuts: baseline + Filter_greedyMuons>0
+#selection :: label: TPFilter; cuts: baseline + Filter_ra2EcalTPFilter>0
+#selection :: label: BEFilter; cuts: baseline + Filter_ra2EcalBEFilter>0
+#selection :: label: HCALLaser; cuts: baseline + Filter_hcalLaserEventFilter>0
+#selection :: label: HCALLaserEvtList; cuts: baseline + Filter_HCALLaserEvtFilterList2012>0
+#selection :: label: ECALLaserCorr; cuts: baseline + Filter_ecalLaserCorrFilter>0
+#selection :: label: EEBadSc; cuts: baseline + Filter_eeBadScFilter>0
+#selection :: label: PBNR; cuts: baseline + Filter_PBNRFilter>0
+#selection :: label: ManyStripClus; cuts: baseline + Filter_manystripclus53X<1
+#selection :: label: TooManyStriClus; cuts: baseline + Filter_toomanystripclus53X<1
+#selection :: label: LogErrorTooManyClus; cuts: baseline + Filter_logErrorTooManyClusters<1
+#selection :: label: HONoise; cuts: baseline + Filter_RA2HONoiseFilter>0
+
+selection :: label: AllFilters; cuts: baseline + Filter_HBHENoiseFilterRA2>0 + Filter_beamHaloFilter>0 + Filter_trackingFailureFilter>0 + Filter_inconsistentMuons>0 + Filter_greedyMuons>0 + Filter_ra2EcalTPFilter>0 + Filter_ra2EcalBEFilter>0 + Filter_hcalLaserEventFilter>0 + Filter_ecalLaserCorrFilter>0 + Filter_eeBadScFilter>0 + Filter_PBNRFilter>0 + Filter_HCALLaserEvtFilterList2012>0 + Filter_manystripclus53X<1 + Filter_toomanystripclus53X<1 + Filter_logErrorTooManyClusters<1 + Filter_RA2HONoiseFilter>0
+
+
+#plot :: variable: HT; dataset: Data; histogram: 45, 500, 5000, log
+#plot :: variable: MHT; dataset: Data; histogram:  76, 200, 4000, log
+#plot :: variable: MHT; dataset: Data; histogram:  26, 200, 1500, log
+
+#print event info :: provenance variables: RunNum + LumiBlockNum + EvtNum
+#print event info :: highest: HT, 50
+#print event info :: selections: Bin17, Bin20
+

@@ -1,0 +1,66 @@
+# Specify global parameters
+global :: id: Expectation_SearchBins_Separated
+global :: lumi: 4
+global :: publication status: Preliminary
+global :: output formats: eps, pdf
+style :: plot yields: true 
+
+
+# Specify the variables that are read from the ntuple and their type
+event content :: name: Bin; type: Int_t; label: Bin
+
+# selection values
+
+event content :: name: elecIso; type: Int_t
+event content :: name: elecReco; type: Int_t
+event content :: name: elecAcc; type: Int_t
+event content :: name: muIso; type: Int_t
+event content :: name: muReco; type: Int_t
+event content :: name: muAcc; type: Int_t
+
+#weights
+event content :: name: Weight; type: Float_t
+#############################################################################################################
+# Specify the data source and label the type of data
+
+
+
+
+
+dataset :: label: MuExIso; type: mc; file:/afs/desy.de/user/a/adraeger/2015/Closure.root ; tree: ResultExp; weight: Weight
+dataset :: label: MuExReco; type: mc; file:/afs/desy.de/user/a/adraeger/2015/Closure.root ; tree: ResultExp; weight: Weight
+dataset :: label: MuExAcc; type: mc; file:/afs/desy.de/user/a/adraeger/2015/Closure.root ; tree: ResultExp; weight: Weight
+
+
+dataset :: label: ElecExIso; type: mc; file:/afs/desy.de/user/a/adraeger/2015/Closure.root ; tree: ResultExp; weight: Weight
+dataset :: label: ElecExReco; type: mc; file:/afs/desy.de/user/a/adraeger/2015/Closure.root ; tree: ResultExp; weight: Weight
+dataset :: label: ElecExAcc; type: mc; file:/afs/desy.de/user/a/adraeger/2015/Closure.root ; tree: ResultExp; weight: Weight
+
+
+#############################################################################################################
+#special selection
+selection :: label: Search Bins; cuts: Bin < 100 + muIso < 0.5 (MuExIso) + muReco <0.5(MuExReco) + muAcc < 0.5(MuExAcc)  +  elecIso < 0.5 (ElecExIso) + elecReco <0.5(ElecExReco) + elecAcc < 0.5(ElecExAcc)
+
+
+
+
+#############################################################################################################
+
+
+plot style :: dataset: MuExIso; plot label: #mu Iso; color: kBlue+1
+plot style :: dataset: MuExReco; plot label: #mu Reco; color: kGreen+1
+plot style :: dataset: MuExAcc; plot label: #mu Acc;color: kRed+1
+
+plot style :: dataset: ElecExIso; plot label: e Iso; color: kBlue+1
+plot style :: dataset: ElecExReco; plot label: e Reco; color: kGreen+1
+plot style :: dataset: ElecExAcc; plot label: e Acc;color: kRed+1
+
+#############################################################################################################
+
+plot :: variable: Bin; dataset: MuExIso + MuExReco + MuExAcc; histogram: 72, 0, 72, log
+
+plot :: variable: Bin; dataset: ElecExIso + ElecExReco + ElecExAcc; histogram: 72, 0, 72, log
+
+
+
+

@@ -1,0 +1,140 @@
+# Specify global parameters
+global :: id: Mu_Closure
+global :: lumi: 4
+global :: publication status: Preliminary
+global :: output formats: eps, pdf
+style :: plot yields: true 
+
+
+# Specify the variables that are read from the ntuple and their type
+event content :: name: HT; type: Float_t; label: H_{T}; unit: GeV
+event content :: name: MHT; type: Float_t; label: #slash{H}_{T}; unit: GeV
+event content :: name: MET; type: Float_t; label: #slash{E}_{T}; unit: GeV
+event content :: name: NJets; type: Int_t; label: N_{Jets}
+event content :: name: BTags; type: Int_t; label: BTags
+event content :: name: NVtx; type: UShort_t; label: N(Vtx)
+event content :: name: MTW; type: Float_t; label: M_{T}(w)
+
+# selection values
+
+event content :: name: muIso; type: Int_t
+event content :: name: muReco; type: Int_t
+event content :: name: muAcc; type: Int_t
+
+#weights
+event content :: name: Weight; type: Float_t
+
+#prediction
+
+event content :: name: muIsoWeight; type: Float_t
+event content :: name: muRecoWeight; type: Float_t
+event content :: name: muAccWeight; type: Float_t
+
+event content :: name: selectedIDIsoMuonsNum; type: Int_t
+event content :: name: selectedIDIsoElectronsNum; type: Int_t
+
+#############################################################################################################
+# Specify the data source and label the type of data
+
+dataset :: label: MuExIso; type: mc; file:/afs/desy.de/user/a/adraeger/2015/Expectation.root ; tree: LostLeptonExpectation; weight: Weight
+dataset :: label: MuExReco; type: mc; file:/afs/desy.de/user/a/adraeger/2015/Expectation.root ; tree: LostLeptonExpectation; weight: Weight
+dataset :: label: MuExAcc; type: mc; file:/afs/desy.de/user/a/adraeger/2015/Expectation.root ; tree: LostLeptonExpectation; weight: Weight
+
+dataset :: label: MuCSPrIso; type: mcprediction; file:/afs/desy.de/user/a/adraeger/2015/Prediction.root  ; tree: LostLeptonPrediction; weight: muIsoWeight
+dataset :: label: MuCSPrReco; type: mcprediction; file:/afs/desy.de/user/a/adraeger/2015/Prediction.root  ; tree: LostLeptonPrediction; weight: muRecoWeight
+dataset :: label: MuCSPrAcc; type: mcprediction; file:/afs/desy.de/user/a/adraeger/2015/Prediction.root  ; tree: LostLeptonPrediction; weight: muAccWeight
+
+dataset :: label: ElecCSPrIso; type: mcprediction; file:/afs/desy.de/user/a/adraeger/2015/Prediction.root  ; tree: LostLeptonPrediction; weight: muIsoWeight
+dataset :: label: ElecCSPrReco; type: mcprediction; file:/afs/desy.de/user/a/adraeger/2015/Prediction.root  ; tree: LostLeptonPrediction; weight: muRecoWeight
+dataset :: label: ElecCSPrAcc; type: mcprediction; file:/afs/desy.de/user/a/adraeger/2015/Prediction.root  ; tree: LostLeptonPrediction; weight: muAccWeight
+
+#dataset :: label: MuExIso; type: mc; file:/nfs/dust/cms/user/adraeger/phys14/mc/phys14ANFINAL/Expectation.root ; tree: LostLeptonExpectation; weight: Weight
+#dataset :: label: MuExReco; type: mc; file:/nfs/dust/cms/user/adraeger/phys14/mc/phys14ANFINAL/Expectation.root ; tree: LostLeptonExpectation; weight: Weight
+#dataset :: label: MuExAcc; type: mc; file:/nfs/dust/cms/user/adraeger/phys14/mc/phys14ANFINAL/Expectation.root ; tree: LostLeptonExpectation; weight: Weight
+
+#dataset :: label: MuCSPrIso; type: mcprediction; file:/nfs/dust/cms/user/adraeger/phys14/mc/phys14ANFINAL/Prediction.root  ; tree: LostLeptonPrediction; weight: muIsoWeight
+#dataset :: label: MuCSPrReco; type: mcprediction; file:/nfs/dust/cms/user/adraeger/phys14/mc/phys14ANFINAL/Prediction.root  ; tree: LostLeptonPrediction; weight: muRecoWeight
+#dataset :: label: MuCSPrAcc; type: mcprediction; file:/nfs/dust/cms/user/adraeger/phys14/mc/phys14ANFINAL/Prediction.root  ; tree: LostLeptonPrediction; weight: muAccWeight
+
+#dataset :: label: ElecCSPrIso; type: mcprediction; file:/nfs/dust/cms/user/adraeger/phys14/mc/phys14ANFINAL/Prediction.root  ; tree: LostLeptonPrediction; weight: muIsoWeight
+#dataset :: label: ElecCSPrReco; type: mcprediction; file:/nfs/dust/cms/user/adraeger/phys14/mc/phys14ANFINAL/Prediction.root  ; tree: LostLeptonPrediction; weight: muRecoWeight
+#dataset :: label: ElecCSPrAcc; type: mcprediction; file:/nfs/dust/cms/user/adraeger/phys14/mc/phys14ANFINAL/Prediction.root  ; tree: LostLeptonPrediction; weight: muAccWeight
+
+
+#############################################################################################################
+#special selection
+#special selection
+selection :: label: Baseline; cuts:  NJets > 3.1 + MHT > 200 + HT > 500 +   muIso < 0.5 (MuExIso) + muReco <0.5(MuExReco) + muAcc < 0.5(MuExAcc) + MTW < 100 ( MuCSPrIso, MuCSPrReco, MuCSPrAcc, ElecCSPrIso, ElecCSPrReco, ElecCSPrAcc) + selectedIDIsoMuonsNum > 0.5 ( MuCSPrIso, MuCSPrReco, MuCSPrAcc)+  selectedIDIsoMuonsNum < 1.5 ( MuCSPrIso, MuCSPrReco, MuCSPrAcc) + selectedIDIsoElectronsNum < 0.5 ( MuCSPrIso, MuCSPrReco, MuCSPrAcc) + muIsoWeight < 10 (MuCSPrIso, MuCSPrReco, MuCSPrAcc) + selectedIDIsoMuonsNum <0.5(ElecCSPrIso, ElecCSPrReco, ElecCSPrAcc) + selectedIDIsoElectronsNum >0.5 (ElecCSPrIso, ElecCSPrReco, ElecCSPrAcc) + selectedIDIsoElectronsNum < 1.5 (ElecCSPrIso, ElecCSPrReco, ElecCSPrAcc)
+selection :: label: B>=2_Baseline; cuts: Baseline + BTags > 1.5
+
+
+#############################################################################################################
+plot style :: dataset: MuCSPrIso; plot label: Pred #mu CS; color: kBlue+1
+plot style :: dataset: ElecCSPrIso; plot label: Pred e CS; color: kRed+1
+plot style :: dataset: MuExIso; plot label: t#bar{t} W#rightarrowl#nu+jets #mu Iso; marker: 10; color: 1
+
+
+plot style :: dataset: MuCSPrReco; plot label: Pred #mu CS; color: kBlue+1
+plot style :: dataset: ElecCSPrReco; plot label: Pred e CS; color: kRed+1
+plot style :: dataset: MuExReco; plot label: t#bar{t} W#rightarrowl#nu+jets #mu Reco; marker: 10; color: 1
+
+
+plot style :: dataset: MuCSPrAcc; plot label: Pred #mu CS; color: kBlue+1
+plot style :: dataset: ElecCSPrAcc; plot label: Pred e CS; color: kRed+1
+plot style :: dataset: MuExAcc; plot label: t#bar{t} W#rightarrowl#nu+jets #mu Acc; marker: 10; color: 1
+
+#############################################################################################################
+
+
+plot :: variable: HT; data: MuExIso; background: MuCSPrIso; histogram: 20, 500, 2500, log
+plot :: variable: MHT; data: MuExIso; background: MuCSPrIso; histogram: 18, 200, 1100, log
+plot :: variable: MET; data: MuExIso; background: MuCSPrIso; histogram: 18, 200, 1100, log
+plot :: variable: NJets; data: MuExIso; background: MuCSPrIso; histogram: 10, 3, 13, log
+plot :: variable: BTags; data: MuExIso; background: MuCSPrIso; histogram: 5, 0, 5, log
+plot :: variable: MTW; data: MuExIso; background: MuCSPrIso; histogram: 40, 0, 200, log
+plot :: variable: NVtx; data: MuExIso; background: MuCSPrIso;  histogram: 25, -0.5, 49.5, log
+
+
+plot :: variable: HT; data: MuExReco; background: MuCSPrReco; histogram: 20, 500, 2500, log
+plot :: variable: MHT; data: MuExReco; background: MuCSPrReco; histogram: 18, 200, 1100, log
+plot :: variable: MET; data: MuExReco; background: MuCSPrReco; histogram: 18, 200, 1100, log
+plot :: variable: NJets; data: MuExReco; background: MuCSPrReco; histogram: 10, 3, 13, log
+plot :: variable: BTags; data: MuExReco; background: MuCSPrReco; histogram: 5, 0, 5, log
+plot :: variable: MTW; data: MuExReco; background: MuCSPrReco; histogram: 40, 0, 200, log
+plot :: variable: NVtx; data: MuExReco; background: MuCSPrReco;  histogram: 25, -0.5, 49.5, log
+
+plot :: variable: HT; data: MuExAcc; background: MuCSPrAcc; histogram: 20, 500, 2500, log
+plot :: variable: MHT; data: MuExAcc; background: MuCSPrAcc; histogram: 18, 200, 1100, log
+plot :: variable: MET; data: MuExAcc; background: MuCSPrAcc; histogram: 18, 200, 1100, log
+plot :: variable: NJets; data: MuExAcc; background: MuCSPrAcc; histogram: 10, 3, 13, log
+plot :: variable: BTags; data: MuExAcc; background: MuCSPrAcc; histogram: 5, 0, 5, log
+plot :: variable: MTW; data: MuExAcc; background: MuCSPrAcc; histogram: 40, 0, 200, log
+plot :: variable: NVtx; data: MuExAcc; background: MuCSPrAcc;  histogram: 25, -0.5, 49.5, log
+
+
+plot :: variable: HT; data: MuExIso; background: ElecCSPrIso; histogram: 20, 500, 2500, log
+plot :: variable: MHT; data: MuExIso; background: ElecCSPrIso; histogram: 18, 200, 1100, log
+plot :: variable: MET; data: MuExIso; background: ElecCSPrIso; histogram: 18, 200, 1100, log
+plot :: variable: NJets; data: MuExIso; background: ElecCSPrIso; histogram: 10, 3, 13, log
+plot :: variable: BTags; data: MuExIso; background: ElecCSPrIso; histogram: 5, 0, 5, log
+plot :: variable: MTW; data: MuExIso; background: ElecCSPrIso; histogram: 40, 0, 200, log
+plot :: variable: NVtx; data: MuExIso; background: ElecCSPrIso;  histogram: 25, -0.5, 49.5, log
+
+
+plot :: variable: HT; data: MuExReco; background: ElecCSPrReco; histogram: 20, 500, 2500, log
+plot :: variable: MHT; data: MuExReco; background: ElecCSPrReco; histogram: 18, 200, 1100, log
+plot :: variable: MET; data: MuExReco; background: ElecCSPrReco; histogram: 18, 200, 1100, log
+plot :: variable: NJets; data: MuExReco; background: ElecCSPrReco; histogram: 10, 3, 13, log
+plot :: variable: BTags; data: MuExReco; background: ElecCSPrReco; histogram: 5, 0, 5, log
+plot :: variable: MTW; data: MuExReco; background: ElecCSPrReco; histogram: 40, 0, 200, log
+plot :: variable: NVtx; data: MuExReco; background: ElecCSPrReco;  histogram: 25, -0.5, 49.5, log
+
+plot :: variable: HT; data: MuExAcc; background: ElecCSPrAcc; histogram: 20, 500, 2500, log
+plot :: variable: MHT; data: MuExAcc; background: ElecCSPrAcc; histogram: 18, 200, 1100, log
+plot :: variable: MET; data: MuExAcc; background: ElecCSPrAcc; histogram: 18, 200, 1100, log
+plot :: variable: NJets; data: MuExAcc; background: ElecCSPrAcc; histogram: 10, 3, 13, log
+plot :: variable: BTags; data: MuExAcc; background: ElecCSPrAcc; histogram: 5, 0, 5, log
+plot :: variable: MTW; data: MuExAcc; background: ElecCSPrAcc; histogram: 40, 0, 200, log
+plot :: variable: NVtx; data: MuExAcc; background: ElecCSPrAcc;  histogram: 25, -0.5, 49.5, log
+
+

@@ -1,0 +1,120 @@
+# Specify global parameters
+global :: id: Closure_SearchBins_Separated
+global :: lumi: 4
+global :: publication status: Preliminary
+global :: output formats: eps, pdf
+style :: plot yields: true 
+
+
+# Specify the variables that are read from the ntuple and their type
+event content :: name: Bin; type: Int_t; label: Bin
+
+# selection values
+
+event content :: name: elecIso; type: Int_t
+event content :: name: elecReco; type: Int_t
+event content :: name: elecAcc; type: Int_t
+event content :: name: muIso; type: Int_t
+event content :: name: muReco; type: Int_t
+event content :: name: muAcc; type: Int_t
+
+#weights
+event content :: name: Weight; type: Float_t
+
+#prediction
+event content :: name: totalWeightDiLep; type: Float_t
+
+event content :: name: elecIsoWeight; type: Float_t
+event content :: name: elecRecoWeight; type: Float_t
+event content :: name: elecAccWeight; type: Float_t
+event content :: name: muIsoWeight; type: Float_t
+event content :: name: muRecoWeight; type: Float_t
+event content :: name: muAccWeight; type: Float_t
+
+
+event content :: name: selectedIDIsoMuonsNum; type: Int_t
+event content :: name: selectedIDIsoElectronsNum; type: Int_t
+#############################################################################################################
+# Specify the data source and label the type of data
+
+dataset :: label: MCEx; type: mc; file:/afs/desy.de/user/a/adraeger/2015/Closure.root ; tree: ResultExp; weight: Weight
+#dataset :: label: MCExMiniIso; type: mc; file:/afs/desy.de/user/a/adraeger/2015/miniIsolationLepton/Closure.root ; tree: ResultExp; weight: Weight
+dataset :: label: Pred; type: mcprediction; file:/afs/desy.de/user/a/adraeger/2015/Closure.root  ; tree: ResultPre; weight: totalWeightDiLep ; scale:0.5
+
+dataset :: label: MuCS; type: mcprediction; file:/afs/desy.de/user/a/adraeger/2015/Closure.root  ; tree: ResultPre; weight: Weight
+dataset :: label: ElecCS; type: mcprediction; file:/afs/desy.de/user/a/adraeger/2015/Closure.root  ; tree: ResultPre; weight: Weight
+
+#dataset :: label: MuCSMiniIso; type: mcprediction; file:/afs/desy.de/user/a/adraeger/2015/miniIsolationLepton/Closure.root  ; tree: ResultPre; weight: Weight
+#dataset :: label: ElecCSMiniIso; type: mcprediction; file:/afs/desy.de/user/a/adraeger/2015/miniIsolationLepton/Closure.root  ; tree: ResultPre; weight: Weight
+
+dataset :: label: MuExIso; type: mc; file:/afs/desy.de/user/a/adraeger/2015/Closure.root ; tree: ResultExp; weight: Weight
+dataset :: label: MuExReco; type: mc; file:/afs/desy.de/user/a/adraeger/2015/Closure.root ; tree: ResultExp; weight: Weight
+dataset :: label: MuExAcc; type: mc; file:/afs/desy.de/user/a/adraeger/2015/Closure.root ; tree: ResultExp; weight: Weight
+
+dataset :: label: MuCSPrIso; type: mcprediction; file:/afs/desy.de/user/a/adraeger/2015/Closure.root  ; tree: ResultPre; weight: muIsoWeight ; scale:0.5
+dataset :: label: MuCSPrReco; type: mcprediction; file:/afs/desy.de/user/a/adraeger/2015/Closure.root  ; tree: ResultPre; weight: muRecoWeight ; scale:0.5
+dataset :: label: MuCSPrAcc; type: mcprediction; file:/afs/desy.de/user/a/adraeger/2015/Closure.root  ; tree: ResultPre; weight: muAccWeight ; scale:0.5
+
+
+dataset :: label: ElecExIso; type: mc; file:/afs/desy.de/user/a/adraeger/2015/Closure.root ; tree: ResultExp; weight: Weight
+dataset :: label: ElecExReco; type: mc; file:/afs/desy.de/user/a/adraeger/2015/Closure.root ; tree: ResultExp; weight: Weight
+dataset :: label: ElecExAcc; type: mc; file:/afs/desy.de/user/a/adraeger/2015/Closure.root ; tree: ResultExp; weight: Weight
+
+dataset :: label: ElecCSPrIso; type: mcprediction; file:/afs/desy.de/user/a/adraeger/2015/Closure.root  ; tree: ResultPre; weight: elecIsoWeight ; scale:0.5
+dataset :: label: ElecCSPrReco; type: mcprediction; file:/afs/desy.de/user/a/adraeger/2015/Closure.root  ; tree: ResultPre; weight: elecRecoWeight ; scale:0.5
+dataset :: label: ElecCSPrAcc; type: mcprediction; file:/afs/desy.de/user/a/adraeger/2015/Closure.root  ; tree: ResultPre; weight: elecAccWeight ; scale:0.5
+
+#############################################################################################################
+#special selection
+selection :: label: Search Bins; cuts: Bin < 100 + muIso < 0.5 (MuExIso) + muReco <0.5(MuExReco) + muAcc < 0.5(MuExAcc)  +  elecIso < 0.5 (ElecExIso) + elecReco <0.5(ElecExReco) + elecAcc < 0.5(ElecExAcc) + selectedIDIsoMuonsNum >0.5 (MuCS) + selectedIDIsoElectronsNum > 0.5 (ElecCS)
+
+
+
+
+#############################################################################################################
+plot style :: dataset: Pred; plot label: Pred. ; color: kBlue+1
+plot style :: dataset: MCEx; plot label: Exp; marker: 10; color: 1
+#plot style :: dataset: MCExMiniIso; plot label: Exp mini iso; color: kBlue+1
+
+plot style :: dataset: ElecCS; plot label: e CS ; color: kBlue+1
+#plot style :: dataset: ElecCS; plot label: e CS old iso; marker: 10; color: 1
+plot style :: dataset: MuCS; plot label: #mu CS old iso; marker: 10; color: 1
+
+#plot style :: dataset: ElecCSMiniIso; plot label: e CS mini iso; color: kRed+1
+#plot style :: dataset: MuCSMiniIso; plot label: #mu CS mini iso; color: kBlue+1
+
+plot style :: dataset: MuExIso; plot label: t#bar{t} W#rightarrowl#nu+jets #mu Iso; marker: 10; color: 1
+plot style :: dataset: MuExReco; plot label: t#bar{t} W#rightarrowl#nu+jets #mu Reco; marker: 10; color: 1
+plot style :: dataset: MuExAcc; plot label: t#bar{t} W#rightarrowl#nu+jets #mu Acc; marker: 10; color: 1
+
+plot style :: dataset: ElecExIso; plot label: t#bar{t} W#rightarrowl#nu+jets e Iso; marker: 10; color: 1
+plot style :: dataset: ElecExReco; plot label: t#bar{t} W#rightarrowl#nu+jets e Reco; marker: 10; color: 1
+plot style :: dataset: ElecExAcc; plot label: t#bar{t} W#rightarrowl#nu+jets e Acc; marker: 10; color: 1
+
+plot style :: dataset: MuCSPrIso; plot label: Pred. ; color: kBlue+1
+plot style :: dataset: MuCSPrReco; plot label: Pred. ; color: kBlue+1
+plot style :: dataset: MuCSPrAcc; plot label: Pred. ; color: kBlue+1
+
+plot style :: dataset: ElecCSPrIso; plot label: Pred. ; color: kBlue+1
+plot style :: dataset: ElecCSPrReco; plot label: Pred. ; color: kBlue+1
+plot style :: dataset: ElecCSPrAcc; plot label: Pred. ; color: kBlue+1
+#############################################################################################################
+
+plot :: variable: Bin; data: MCEx; background: Pred; histogram: 72, 0, 72, log
+#plot :: variable: Bin; data: MCEx; background: MCExMiniIso; histogram: 72, 0, 72, log
+
+plot :: variable: Bin; data: MuCS; background: ElecCS; histogram: 72, 0, 72, log
+
+#plot :: variable: Bin; data: MuCS; background: MuCSMiniIso; histogram: 72, 0, 72, log
+#plot :: variable: Bin; data: ElecCS; background: ElecCSMiniIso; histogram: 72, 0, 72, log
+
+plot :: variable: Bin; data: MuExIso; background: MuCSPrIso; histogram: 72, 0, 72, log
+plot :: variable: Bin; data: MuExReco; background: MuCSPrReco; histogram: 72, 0, 72, log
+plot :: variable: Bin; data: MuExAcc; background: MuCSPrAcc; histogram: 72, 0, 72, log
+
+plot :: variable: Bin; data: ElecExIso; background: ElecCSPrIso; histogram: 72, 0, 72, log
+plot :: variable: Bin; data: ElecExReco; background: ElecCSPrReco; histogram: 72, 0, 72, log
+plot :: variable: Bin; data: ElecExAcc; background: ElecCSPrAcc; histogram: 72, 0, 72, log
+
+
+
